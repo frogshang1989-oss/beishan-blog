@@ -6,7 +6,7 @@ backend:
   repo: frogshang1989-oss/beishan-blog
   branch: main
   # OAuth 代理地址（社区免费服务，也可自建）
-  base_url: https://decapcms-oauth.vercel.app
+  base_url:  https://netlify-cms-oauth-psi.vercel.app
   # auth_scope: repo  # 需要的 GitHub 权限
 
 # 管理界面语言
