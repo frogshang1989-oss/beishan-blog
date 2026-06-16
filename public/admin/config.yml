@@ -1,0 +1,99 @@
+# Decap CMS 配置文件
+# 访问 https://你的域名/admin/ 进入后台管理系统
+
+backend:
+  name: github
+  repo: frogshang1989-oss/beishan-blog
+  branch: main
+  # OAuth 代理地址（社区免费服务，也可自建）
+  base_url: https://decapcms-oauth.vercel.app
+  # auth_scope: repo  # 需要的 GitHub 权限
+
+# 管理界面语言
+locale: 'zh_Hans'
+
+# 媒体文件存储
+media_folder: "public/images"
+public_folder: "/images"
+
+# 站点配置
+site_url: https://frogshang1989-oss.github.io/beishan-blog/
+display_url: https://frogshang1989-oss.github.io/beishan-blog/
+logo_url: https://frogshang1989-oss.github.io/beishan-blog/images/logo.png
+
+# 内容集合定义
+collections:
+  # ====== 博客文章 ======
+  - name: "posts"
+    label: "文章管理"
+    label_singular: "文章"
+    folder: "src/posts"
+    create: true
+    # 文件名根据标题自动生成拼音 slug
+    slug: "{{slug}}"
+    # 文章预览路径
+    preview_path: "/#/post/{{slug}}"
+    # 格式化配置
+    format: "yaml-frontmatter"
+    extension: "md"
+    # 按发布日期排序
+    sortable_fields: ["date", "title"]
+    view_filters:
+      - label: "全部文章"
+        field: "title"
+        pattern: ""
+      - label: "最近一周"
+        field: "date"
+        pattern: "last_week"
+    view_groups:
+      - label: "按年份"
+        field: "date"
+        pattern: \d{4}
+    # 字段定义
+    fields:
+      - label: "标题"
+        name: "title"
+        widget: "string"
+        required: true
+        hint: "文章标题，将显示在首页列表和文章详情页"
+      - label: "发布日期"
+        name: "date"
+        widget: "datetime"
+        format: "YYYY-MM-DD"
+        date_format: "YYYY-MM-DD"
+        time_format: false
+        default: ""
+        required: true
+      - label: "标签"
+        name: "tags"
+        widget: "list"
+        default: []
+        hint: "输入标签后按回车确认。可用于分类筛选"
+        min: 1
+      - label: "正文"
+        name: "body"
+        widget: "markdown"
+        required: true
+        hint: "支持 Markdown 语法，可以插入图片、代码块、表格等"
+
+  # ====== 关于页面 ======
+  - name: "about"
+    label: "关于页面"
+    label_singular: "关于页面"
+    files:
+      - name: "about_page"
+        label: "关于我"
+        file: "src/posts/_about.md"
+        fields:
+          - label: "页面标题"
+            name: "title"
+            widget: "string"
+            default: "关于"
+          - label: "内容"
+            name: "body"
+            widget: "markdown"
+            required: true
+
+# ====== 编辑器配置 ======
+editor:
+  preview: true

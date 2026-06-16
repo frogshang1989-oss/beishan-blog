@@ -77,11 +77,16 @@ export function useArticles() {
     return b.date.localeCompare(a.date)
   })
 
-  // 收集所有标签
+  // 公开文章（排除以下划线开头的系统文件，如 _about.md）
+  const publicPosts = computed(() =>
+    posts.value.filter(p => !p.slug.startsWith('_'))
+  )
+
+  // 收集所有标签（仅统计公开文章）
   const allTags = computed(() => {
     const tagSet = new Set()
     const tagCount = {}
-    posts.value.forEach(p => {
+    publicPosts.value.forEach(p => {
       p.tags.forEach(t => {
         tagSet.add(t)
         tagCount[t] = (tagCount[t] || 0) + 1
@@ -92,5 +97,5 @@ export function useArticles() {
       .sort((a, b) => b.count - a.count)
   })
 
-  return { posts, allTags }
+  return { posts: publicPosts, allTags, allPosts: posts }
 }
