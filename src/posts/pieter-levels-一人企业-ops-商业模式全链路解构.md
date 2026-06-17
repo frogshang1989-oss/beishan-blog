@@ -1,9 +1,14 @@
 ---
-title: Pieter Levels 一人企业(OPS)商业模式全链路解构
+title: "Pieter Levels 一人企业(OPS)商业模式全链路解构"
 date: 2026-06-17
 tags:
-  - 一人模式
+  - AI工具
+  - 自动化
+  - 内容变现
+  - 产品设计
+  - 运营
 ---
+
 ## Pieter Levels 一人企业(OPS)商业模式全链路解构
 
 > 分析框架：OPS双轴转化工作流 v1.0  

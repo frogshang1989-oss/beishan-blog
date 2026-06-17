@@ -5,8 +5,25 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <meta name="robots" content="noindex, nofollow">
   <title>内容管理 - 北山洞见</title>
+  <style>
+    /* 自定义 CMS 主题微调 */
+    :root {
+      --primary: #0071e3;
+    }
+  </style>
 </head>
 <body>
+  <!--
+    Decap CMS 3.x 已内置剪贴板图片粘贴支持：
+    1. Ctrl+V / Cmd+V 在编辑器中直接粘贴截图
+    2. 图片自动上传到 public/images/ 目录
+    3. 自动插入 ![](/images/xxx.png) Markdown 语法
+    
+    前提条件：
+    - 已通过 GitHub OAuth 登录
+    - media_folder 配置正确（见 config.yml）
+    - 浏览器支持 Clipboard API
+  -->
   <script src="https://unpkg.com/decap-cms@^3.0.0/dist/decap-cms.js"></script>
 </body>
 </html>

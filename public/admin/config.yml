@@ -12,7 +12,9 @@ backend:
 # 管理界面语言
 locale: 'zh_Hans'
 
-# 媒体文件存储
+# ====== 媒体文件配置 ======
+# 支持：拖拽上传 / 工具栏按钮上传 / 剪贴板 Ctrl+V 粘贴图片
+# 上传后自动插入 Markdown 图片语法，图片存储在 public/images/
 media_folder: "public/images"
 public_folder: "/images"
 
@@ -74,7 +76,7 @@ collections:
         name: "body"
         widget: "markdown"
         required: true
-        hint: "【Markdown 语法速查】图片：拖入或点击工具栏🖼️按钮上传 | 图表：```mermaid↵流程图代码↵``` | 链接：工具栏🔗或 [文字](网址)"
+        hint: "【图片】Ctrl+V 直接粘贴截图 | 拖拽图片到编辑器 | 点击工具栏🖼️按钮上传\n【图表】```mermaid↵流程图代码↵```\n【链接】工具栏🔗按钮 或 [文字](网址)"
 
   # ====== 关于页面 ======
   - name: "about"
