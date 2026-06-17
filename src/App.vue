@@ -4,9 +4,11 @@
       <div class="header-inner">
         <router-link to="/" class="header-title">{{ config.title }}</router-link>
         <nav class="header-nav">
-          <router-link to="/" exact-active-class="active">文章</router-link>
-          <router-link to="/tags" active-class="active">标签</router-link>
-          <router-link to="/about" active-class="active">关于</router-link>
+          <router-link to="/industry-insight" active-class="active">行业洞察</router-link>
+          <router-link to="/business-model" active-class="active">商业模式</router-link>
+          <router-link to="/business-thinking" active-class="active">商业思维</router-link>
+          <router-link to="/tags" active-class="active" class="nav-secondary">标签</router-link>
+          <router-link to="/about" active-class="active" class="nav-secondary">关于</router-link>
         </nav>
       </div>
     </header>

@@ -8,7 +8,8 @@
     "build": "vite build && node scripts/generate-sitemap.js",
     "preview": "vite preview",
     "auto-tag": "node scripts/auto-tag.js",
-    "auto-tag:apply": "node scripts/auto-tag.js --apply"
+    "auto-tag:apply": "node scripts/auto-tag.js --apply",
+    "publish": "node scripts/publish.js"
   },
   "dependencies": {
     "highlight.js": "^11.11.0",

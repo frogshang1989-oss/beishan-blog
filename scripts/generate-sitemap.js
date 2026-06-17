@@ -1,10 +1,10 @@
 /**
- * Sitemap 生成脚本
+ * Sitemap 生成脚本 - 支持三板块分类
  * 扫描所有文章和页面，生成符合标准的 sitemap.xml
  * 用法：node scripts/generate-sitemap.js
  */
-import { readdirSync, readFileSync, writeFileSync } from 'fs'
-import { resolve, dirname } from 'path'
+import { readdirSync, readFileSync, writeFileSync, statSync } from 'fs'
+import { resolve, join, extname, dirname } from 'path'
 import { fileURLToPath } from 'url'
 
 const __dirname = dirname(fileURLToPath(import.meta.url))
@@ -15,8 +15,11 @@ const OUTPUT = resolve(__dirname, '../dist/sitemap.xml')
 // 静态页面
 const staticPages = [
   { url: '/', changefreq: 'daily', priority: '1.0' },
-  { url: '/about', changefreq: 'monthly', priority: '0.7' },
-  { url: '/tags', changefreq: 'weekly', priority: '0.8' }
+  { url: '/industry-insight', changefreq: 'weekly', priority: '0.9' },
+  { url: '/business-model', changefreq: 'weekly', priority: '0.9' },
+  { url: '/business-thinking', changefreq: 'weekly', priority: '0.9' },
+  { url: '/tags', changefreq: 'weekly', priority: '0.8' },
+  { url: '/about', changefreq: 'monthly', priority: '0.7' }
 ]
 
 // 解析 Markdown frontmatter
@@ -28,7 +31,6 @@ function parseFrontmatter(content) {
     const kv = line.match(/^(\w+):\s*(.+)/)
     if (kv) {
       let val = kv[2].trim()
-      // 去掉引号
       if ((val.startsWith("'") && val.endsWith("'")) || (val.startsWith('"') && val.endsWith('"'))) {
         val = val.slice(1, -1)
       }
@@ -38,18 +40,32 @@ function parseFrontmatter(content) {
   return frontmatter
 }
 
-// 扫描文章
+// 递归扫描文章
+function scanMdFiles(dir) {
+  const results = []
+  const entries = readdirSync(dir)
+  for (const entry of entries) {
+    const fullPath = join(dir, entry)
+    const stat = statSync(fullPath)
+    if (stat.isDirectory()) {
+      results.push(...scanMdFiles(fullPath))
+    } else if (extname(entry) === '.md' && !entry.startsWith('_')) {
+      results.push(fullPath)
+    }
+  }
+  return results
+}
+
 function scanPosts() {
   const posts = []
   try {
-    const files = readdirSync(POSTS_DIR)
+    const files = scanMdFiles(POSTS_DIR)
     files.forEach(f => {
-      if (!f.endsWith('.md') || f.startsWith('_')) return
-      const content = readFileSync(resolve(POSTS_DIR, f), 'utf-8')
+      const content = readFileSync(f, 'utf-8')
       const fm = parseFrontmatter(content)
       if (fm.title) {
         posts.push({
-          slug: f.replace('.md', ''),
+          slug: f.replace(/\\/g, '/').split('/').pop().replace('.md', ''),
           date: fm.date || new Date().toISOString().slice(0, 10)
         })
       }
@@ -65,7 +81,6 @@ function generateSitemap() {
   const posts = scanPosts()
   const urls = []
 
-  // 静态页面
   staticPages.forEach(p => {
     urls.push(`  <url>
     <loc>${BASE_URL}${p.url}</loc>
@@ -74,7 +89,6 @@ function generateSitemap() {
   </url>`)
   })
 
-  // 文章页面
   posts.sort((a, b) => b.date.localeCompare(a.date))
   posts.forEach(p => {
     urls.push(`  <url>

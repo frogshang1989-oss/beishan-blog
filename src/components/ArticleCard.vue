@@ -8,12 +8,11 @@
     </h2>
     <p class="article-card-excerpt">{{ post.excerpt }}</p>
     <div class="article-card-tags" v-if="post.tags.length">
-      <router-link
+      <span
         v-for="tag in post.tags"
         :key="tag"
-        :to="`/?tag=${encodeURIComponent(tag)}`"
         class="tag"
-      >{{ tag }}</router-link>
+      >{{ tag }}</span>
     </div>
   </article>
 </template>

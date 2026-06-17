@@ -13,7 +13,7 @@
  *   node scripts/auto-tag.js --dry    # 仅显示建议，不修改文件
  */
 
-import { readFileSync, writeFileSync, readdirSync, existsSync } from 'fs'
+import { readFileSync, writeFileSync, readdirSync, existsSync, statSync } from 'fs'
 import { join, extname } from 'path'
 import { fileURLToPath } from 'url'
 import { dirname } from 'path'
@@ -257,7 +257,23 @@ function main() {
   console.log(`模式: ${mode === 'apply' ? '自动补全' : mode === 'dry' ? '仅预览' : '仅报告'}`)
   console.log('')
 
-  const files = readdirSync(POSTS_DIR).filter(f => extname(f) === '.md' && !f.startsWith('_'))
+  // 递归扫描 posts 目录及其子目录
+  function scanMdFiles(dir) {
+    const results = []
+    const entries = readdirSync(dir)
+    for (const entry of entries) {
+      const fullPath = join(dir, entry)
+      const stat = statSync(fullPath)
+      if (stat.isDirectory()) {
+        results.push(...scanMdFiles(fullPath))
+      } else if (extname(entry) === '.md' && !entry.startsWith('_')) {
+        results.push(fullPath)
+      }
+    }
+    return results
+  }
+
+  const files = scanMdFiles(POSTS_DIR)
 
   if (files.length === 0) {
     console.log('📭 src/posts/ 目录下暂无文章')
@@ -269,12 +285,11 @@ function main() {
 
   let modifiedCount = 0
 
-  for (const file of files) {
-    const filePath = join(POSTS_DIR, file)
+  for (const filePath of files) {
     const raw = readFileSync(filePath, 'utf-8')
     const { frontmatter, content } = parseFrontmatter(raw)
     const existingTags = Array.isArray(frontmatter.tags) ? frontmatter.tags : []
-    const title = frontmatter.title || file
+    const title = frontmatter.title || filePath
 
     // 分析全文内容（标题 + 正文）
     const fullText = title + '\n' + content

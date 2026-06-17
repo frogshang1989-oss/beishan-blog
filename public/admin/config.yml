@@ -1,20 +1,21 @@
 # Decap CMS 配置文件
-# 访问 https://你的域名/admin/ 进入后台管理系统
+# 访问 https://frogshang1989-oss.github.io/beishan-blog/admin/ 进入后台管理系统
+#
+# 三大板块：
+#   行业洞察 (industry-insight) — 宏观趋势、行业格局、政策解读
+#   商业模式 (business-model)   — 商业模式的深度拆解与案例研究
+#   商业思维 (business-thinking) — 认知升级、方法论沉淀、创业心法
 
 backend:
   name: github
   repo: frogshang1989-oss/beishan-blog
   branch: main
-  # OAuth 代理地址（社区免费服务，也可自建）
-  base_url:  https://netlify-cms-oauth-psi.vercel.app
-  # auth_scope: repo  # 需要的 GitHub 权限
+  base_url: https://netlify-cms-oauth-psi.vercel.app
 
-# 管理界面语言
 locale: 'zh_Hans'
 
 # ====== 媒体文件配置 ======
 # 支持：拖拽上传 / 工具栏按钮上传 / 剪贴板 Ctrl+V 粘贴图片
-# 上传后自动插入 Markdown 图片语法，图片存储在 public/images/
 media_folder: "public/images"
 public_folder: "/images"
 
@@ -25,39 +26,30 @@ logo_url: https://frogshang1989-oss.github.io/beishan-blog/images/logo.png
 
 # 内容集合定义
 collections:
-  # ====== 博客文章 ======
-  - name: "posts"
-    label: "文章管理"
-    label_singular: "文章"
-    folder: "src/posts"
+  # ====== 板块一：行业洞察 ======
+  - name: "industry-insight"
+    label: "📊 行业洞察"
+    label_singular: "行业洞察文章"
+    folder: "src/posts/industry-insight"
     create: true
-    # 文件名根据标题自动生成拼音 slug
     slug: "{{slug}}"
-    # 文章预览路径
     preview_path: "/#/post/{{slug}}"
-    # 格式化配置
     format: "yaml-frontmatter"
     extension: "md"
-    # 按发布日期排序
     sortable_fields: ["date", "title"]
     view_filters:
-      - label: "全部文章"
+      - label: "全部"
         field: "title"
         pattern: ""
-      - label: "最近一周"
-        field: "date"
-        pattern: "last_week"
     view_groups:
       - label: "按年份"
         field: "date"
         pattern: \d{4}
-    # 字段定义
     fields:
       - label: "标题"
         name: "title"
         widget: "string"
         required: true
-        hint: "文章标题，将显示在首页列表和文章详情页"
       - label: "发布日期"
         name: "date"
         widget: "datetime"
@@ -66,21 +58,121 @@ collections:
         time_format: false
         default: ""
         required: true
+      - label: "所属板块"
+        name: "category"
+        widget: "hidden"
+        default: "industry-insight"
       - label: "标签"
         name: "tags"
         widget: "list"
         default: []
-        hint: "输入标签后按回车确认。可用于分类筛选"
+        hint: "输入标签后按回车确认。建议：行业分析、宏观趋势、政策解读…"
         min: 1
       - label: "正文"
         name: "body"
         widget: "markdown"
         required: true
-        hint: "【图片】Ctrl+V 直接粘贴截图 | 拖拽图片到编辑器 | 点击工具栏🖼️按钮上传\n【图表】```mermaid↵流程图代码↵```\n【链接】工具栏🔗按钮 或 [文字](网址)"
+        hint: "【图片】Ctrl+V 直接粘贴 | 拖拽到编辑器 | 🖼️按钮上传\n【图表】```mermaid↵代码↵```\n【链接】🔗按钮 或 [文字](网址)"
+
+  # ====== 板块二：商业模式 ======
+  - name: "business-model"
+    label: "🔍 商业模式"
+    label_singular: "商业模式文章"
+    folder: "src/posts/business-model"
+    create: true
+    slug: "{{slug}}"
+    preview_path: "/#/post/{{slug}}"
+    format: "yaml-frontmatter"
+    extension: "md"
+    sortable_fields: ["date", "title"]
+    view_filters:
+      - label: "全部"
+        field: "title"
+        pattern: ""
+    view_groups:
+      - label: "按年份"
+        field: "date"
+        pattern: \d{4}
+    fields:
+      - label: "标题"
+        name: "title"
+        widget: "string"
+        required: true
+      - label: "发布日期"
+        name: "date"
+        widget: "datetime"
+        format: "YYYY-MM-DD"
+        date_format: "YYYY-MM-DD"
+        time_format: false
+        default: ""
+        required: true
+      - label: "所属板块"
+        name: "category"
+        widget: "hidden"
+        default: "business-model"
+      - label: "标签"
+        name: "tags"
+        widget: "list"
+        default: []
+        hint: "输入标签后按回车确认。建议：商业模式、拆解框架、案例研究…"
+        min: 1
+      - label: "正文"
+        name: "body"
+        widget: "markdown"
+        required: true
+        hint: "【图片】Ctrl+V 直接粘贴 | 拖拽到编辑器 | 🖼️按钮上传\n【图表】```mermaid↵代码↵```\n【链接】🔗按钮 或 [文字](网址)"
+
+  # ====== 板块三：商业思维 ======
+  - name: "business-thinking"
+    label: "💡 商业思维"
+    label_singular: "商业思维文章"
+    folder: "src/posts/business-thinking"
+    create: true
+    slug: "{{slug}}"
+    preview_path: "/#/post/{{slug}}"
+    format: "yaml-frontmatter"
+    extension: "md"
+    sortable_fields: ["date", "title"]
+    view_filters:
+      - label: "全部"
+        field: "title"
+        pattern: ""
+    view_groups:
+      - label: "按年份"
+        field: "date"
+        pattern: \d{4}
+    fields:
+      - label: "标题"
+        name: "title"
+        widget: "string"
+        required: true
+      - label: "发布日期"
+        name: "date"
+        widget: "datetime"
+        format: "YYYY-MM-DD"
+        date_format: "YYYY-MM-DD"
+        time_format: false
+        default: ""
+        required: true
+      - label: "所属板块"
+        name: "category"
+        widget: "hidden"
+        default: "business-thinking"
+      - label: "标签"
+        name: "tags"
+        widget: "list"
+        default: []
+        hint: "输入标签后按回车确认。建议：认知升级、方法论、一人公司…"
+        min: 1
+      - label: "正文"
+        name: "body"
+        widget: "markdown"
+        required: true
+        hint: "【图片】Ctrl+V 直接粘贴 | 拖拽到编辑器 | 🖼️按钮上传\n【图表】```mermaid↵代码↵```\n【链接】🔗按钮 或 [文字](网址)"
 
   # ====== 关于页面 ======
   - name: "about"
-    label: "关于页面"
+    label: "📄 关于页面"
     label_singular: "关于页面"
     files:
       - name: "about_page"

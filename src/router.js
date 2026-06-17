@@ -1,7 +1,6 @@
 import { createRouter, createWebHistory } from 'vue-router'
 import siteConfig from './config.js'
 
-// 自动检测 base 路径：GitHub Pages 下为 /beishan-blog/，本地开发为 /
 const base = import.meta.env.BASE_URL || '/'
 
 const routes = [
@@ -16,6 +15,33 @@ const routes = [
     name: 'post',
     component: () => import('./views/PostView.vue'),
     meta: { title: '文章' }
+  },
+  {
+    path: '/industry-insight',
+    name: 'industry-insight',
+    component: () => import('./views/CategoryView.vue'),
+    meta: {
+      title: '行业洞察',
+      description: '宏观趋势、行业格局、政策解读与市场信号——从行业视角看懂商业世界的底层变化。'
+    }
+  },
+  {
+    path: '/business-model',
+    name: 'business-model',
+    component: () => import('./views/CategoryView.vue'),
+    meta: {
+      title: '商业模式',
+      description: '商业模式的深度拆解、案例研究与框架构建——系统化理解每一种赚钱方式。'
+    }
+  },
+  {
+    path: '/business-thinking',
+    name: 'business-thinking',
+    component: () => import('./views/CategoryView.vue'),
+    meta: {
+      title: '商业思维',
+      description: '认知升级、方法论沉淀、创业心法与工具论——构建你的商业底层操作系统。'
+    }
   },
   {
     path: '/tags',
