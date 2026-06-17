@@ -6,7 +6,7 @@
       <div class="article-header-meta">
         <span v-if="post.date">{{ formatDate(post.date) }}</span>
       </div>
-      <div class="article-card-tags" style="margin-top: 10px">
+      <div class="article-card-tags">
         <router-link
           v-for="tag in post.tags"
           :key="tag"

@@ -1,6 +1,6 @@
 <template>
   <div class="app-container">
-    <header class="app-header">
+    <header class="app-header" :class="{ scrolled: isScrolled }">
       <div class="header-inner">
         <router-link to="/" class="header-title">{{ config.title }}</router-link>
         <nav class="header-nav">
@@ -14,11 +14,27 @@
       <router-view />
     </main>
     <footer class="app-footer">
-      {{ config.footer }}
+      <p>{{ config.footer }}</p>
     </footer>
   </div>
 </template>
 
 <script setup>
+import { ref, onMounted, onUnmounted } from 'vue'
 import config from './config.js'
+
+const isScrolled = ref(false)
+
+function handleScroll() {
+  isScrolled.value = window.scrollY > 0
+}
+
+onMounted(() => {
+  window.addEventListener('scroll', handleScroll, { passive: true })
+  handleScroll()
+})
+
+onUnmounted(() => {
+  window.removeEventListener('scroll', handleScroll)
+})
 </script>

@@ -1,11 +1,11 @@
 <template>
   <article class="article-card">
-    <h2 class="article-card-title">
-      <router-link :to="`/post/${post.slug}`">{{ post.title }}</router-link>
-    </h2>
     <div class="article-card-meta">
       <span v-if="post.date">{{ formatDate(post.date) }}</span>
     </div>
+    <h2 class="article-card-title">
+      <router-link :to="`/post/${post.slug}`">{{ post.title }}</router-link>
+    </h2>
     <p class="article-card-excerpt">{{ post.excerpt }}</p>
     <div class="article-card-tags" v-if="post.tags.length">
       <router-link

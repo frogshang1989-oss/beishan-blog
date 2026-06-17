@@ -5,7 +5,7 @@
 </template>
 
 <script setup>
-import { computed, onMounted } from 'vue'
+import { computed } from 'vue'
 import { marked } from 'marked'
 import hljs from 'highlight.js'
 import 'highlight.js/styles/github-dark.css'
@@ -20,7 +20,6 @@ useSEO({
 
 const { allPosts } = useArticles()
 
-// 配置 marked
 marked.setOptions({
   gfm: true,
   breaks: false,
