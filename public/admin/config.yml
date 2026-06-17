@@ -74,7 +74,7 @@ collections:
         name: "body"
         widget: "markdown"
         required: true
-        hint: "支持 Markdown 语法，可以插入图片、代码块、表格等"
+        hint: "【Markdown 语法速查】图片：拖入或点击工具栏🖼️按钮上传 | 图表：```mermaid↵流程图代码↵``` | 链接：工具栏🔗或 [文字](网址)"
 
   # ====== 关于页面 ======
   - name: "about"

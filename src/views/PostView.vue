@@ -15,7 +15,7 @@
         >{{ tag }}</router-link>
       </div>
     </div>
-    <div class="article-content" v-html="renderedContent"></div>
+    <div class="article-content" ref="contentRef" v-html="renderedContent"></div>
   </div>
   <div v-else class="empty-state">
     <h2>文章不存在</h2>
@@ -24,10 +24,11 @@
 </template>
 
 <script setup>
-import { computed } from 'vue'
+import { computed, ref, watch, nextTick, onMounted } from 'vue'
 import { useRoute } from 'vue-router'
 import { marked } from 'marked'
 import hljs from 'highlight.js'
+import mermaid from 'mermaid'
 import 'highlight.js/styles/github-dark.css'
 import { useArticles } from '../composables/useArticles.js'
 
@@ -35,11 +36,23 @@ const route = useRoute()
 const { posts } = useArticles()
 const slug = route.params.slug
 
+// 初始化 Mermaid
+mermaid.initialize({
+  startOnLoad: false,
+  theme: 'default',
+  securityLevel: 'loose',
+  fontFamily: '-apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif'
+})
+
 // 配置 marked
 marked.setOptions({
   gfm: true,
   breaks: false,
   highlight: function(code, lang) {
+    // Mermaid 代码块不进行语法高亮，保留原始内容
+    if (lang === 'mermaid') {
+      return `<div class="mermaid">${code}</div>`
+    }
     if (lang && hljs.getLanguage(lang)) {
       try {
         return hljs.highlight(code, { language: lang }).value
@@ -54,6 +67,25 @@ const renderedContent = computed(() => {
   if (!post.value) return ''
   return marked.parse(post.value.content)
 })
+
+// Mermaid 渲染：在 DOM 更新后执行
+const contentRef = ref(null)
+
+async function renderMermaid() {
+  await nextTick()
+  const container = document.querySelector('.article-content')
+  if (!container) return
+  const mermaidBlocks = container.querySelectorAll('.mermaid')
+  if (mermaidBlocks.length === 0) return
+  try {
+    await mermaid.run({ nodes: Array.from(mermaidBlocks) })
+  } catch (e) {
+    console.warn('Mermaid 渲染失败:', e)
+  }
+}
+
+watch(renderedContent, renderMermaid)
+onMounted(renderMermaid)
 
 function formatDate(dateStr) {
   if (!dateStr) return ''

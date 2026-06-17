@@ -385,6 +385,22 @@ img {
   color: var(--c-text);
 }
 
+/* ===== Mermaid 图表样式 ===== */
+.mermaid {
+  margin: 24px 0;
+  padding: 16px;
+  background: var(--c-bg-secondary);
+  border-radius: 8px;
+  border: 1px solid var(--c-border);
+  overflow-x: auto;
+  text-align: center;
+}
+
+.mermaid svg {
+  max-width: 100%;
+  height: auto;
+}
+
 /* ===== 响应式 ===== */
 @media (max-width: 600px) {
   .app-main {
