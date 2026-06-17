@@ -5,11 +5,18 @@
 </template>
 
 <script setup>
-import { computed } from 'vue'
+import { computed, onMounted } from 'vue'
 import { marked } from 'marked'
 import hljs from 'highlight.js'
 import 'highlight.js/styles/github-dark.css'
 import { useArticles } from '../composables/useArticles.js'
+import { useSEO } from '../composables/useSEO.js'
+
+useSEO({
+  title: '关于',
+  description: '关于山人和北山洞见的介绍。一人公司创业实战者、AI工具赋能方法论的深度研究者。',
+  url: 'https://frogshang1989-oss.github.io/beishan-blog/about'
+})
 
 const { allPosts } = useArticles()
 

@@ -31,10 +31,35 @@ import hljs from 'highlight.js'
 import mermaid from 'mermaid'
 import 'highlight.js/styles/github-dark.css'
 import { useArticles } from '../composables/useArticles.js'
+import { useSEO } from '../composables/useSEO.js'
 
 const route = useRoute()
 const { posts } = useArticles()
 const slug = route.params.slug
+
+const post = computed(() => posts.value.find(p => p.slug === slug))
+
+// 动态 SEO：文章加载后更新 meta
+watch(post, (p) => {
+  if (!p) return
+  const excerpt = p.content
+    .replace(/^---[\s\S]*?---/, '')  // 去掉 frontmatter
+    .replace(/[#*`>\[\]()!|]/g, '')  // 去掉 markdown 符号
+    .replace(/\n/g, ' ')
+    .trim()
+    .slice(0, 150)
+  useSEO({
+    title: p.title,
+    description: excerpt || p.title,
+    url: `https://frogshang1989-oss.github.io/beishan-blog/post/${p.slug}`,
+    type: 'article',
+    article: {
+      title: p.title,
+      date: p.date || new Date().toISOString().slice(0, 10),
+      tags: p.tags || []
+    }
+  })
+}, { immediate: true })
 
 // 初始化 Mermaid
 mermaid.initialize({
@@ -62,7 +87,6 @@ marked.setOptions({
   }
 })
 
-const post = computed(() => posts.value.find(p => p.slug === slug))
 const renderedContent = computed(() => {
   if (!post.value) return ''
   return marked.parse(post.value.content)

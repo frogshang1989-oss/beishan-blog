@@ -5,15 +5,15 @@
       共 {{ allTags.length }} 个标签，{{ posts.length }} 篇文章
     </p>
     <div class="tag-cloud">
-      <a
+      <router-link
         v-for="tag in allTags"
         :key="tag.name"
-        :href="`#/?tag=${encodeURIComponent(tag.name)}`"
+        :to="`/?tag=${encodeURIComponent(tag.name)}`"
         class="tag"
         style="font-size: 0.85rem; padding: 5px 14px;"
       >
         {{ tag.name }} ({{ tag.count }})
-      </a>
+      </router-link>
     </div>
     <div v-if="!allTags.length" class="empty-state" style="margin-top: 40px;">
       <h2>暂无标签</h2>
@@ -23,7 +23,14 @@
 </template>
 
 <script setup>
+import { onMounted } from 'vue'
 import { useArticles } from '../composables/useArticles.js'
+import { useSEO } from '../composables/useSEO.js'
+
+useSEO({
+  title: '标签分类',
+  description: '浏览所有文章标签，按标签筛选感兴趣的内容。覆盖一人公司、AI赋能、商业模式等领域。'
+})
 
 const { posts, allTags } = useArticles()
 </script>

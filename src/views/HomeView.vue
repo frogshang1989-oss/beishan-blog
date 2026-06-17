@@ -17,10 +17,13 @@
 </template>
 
 <script setup>
-import { ref, computed, watch } from 'vue'
+import { ref, computed, watch, onMounted } from 'vue'
 import { useRoute } from 'vue-router'
 import { useArticles } from '../composables/useArticles.js'
+import { useSEO } from '../composables/useSEO.js'
 import ArticleCard from '../components/ArticleCard.vue'
+
+useSEO()
 
 const { posts } = useArticles()
 const route = useRoute()

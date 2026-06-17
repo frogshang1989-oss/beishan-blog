@@ -1,0 +1,10 @@
+# 允许所有爬虫抓取
+User-agent: *
+Allow: /
+Disallow: /admin/
+
+# Sitemap 地址
+Sitemap: https://frogshang1989-oss.github.io/beishan-blog/sitemap.xml
+
+# 爬虫抓取间隔（秒）
+Crawl-delay: 10
