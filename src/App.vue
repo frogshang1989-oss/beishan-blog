@@ -16,7 +16,22 @@
       <router-view />
     </main>
     <footer class="app-footer">
-      <p>{{ config.footer }}</p>
+      <div class="footer-inner">
+        <div class="footer-social">
+          <a
+            v-for="(link, key) in config.socialLinks"
+            :key="key"
+            :href="link.url"
+            :title="link.label"
+            :target="link.url.startsWith('http') ? '_blank' : ''"
+            class="footer-social-link"
+          >
+            <span class="footer-social-icon">{{ link.icon }}</span>
+            <span class="footer-social-label">{{ link.label }}</span>
+          </a>
+        </div>
+        <p class="footer-copyright">{{ config.footer }}</p>
+      </div>
     </footer>
   </div>
 </template>

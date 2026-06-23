@@ -50,6 +50,12 @@ const routes = [
     meta: { title: '标签分类', description: '浏览所有文章标签，按标签筛选感兴趣的内容。' }
   },
   {
+    path: '/subscribe',
+    name: 'subscribe',
+    component: () => import('./views/SubscribeView.vue'),
+    meta: { title: '订阅周报', description: '订阅北山洞见周报，每周一篇深度商业拆解，覆盖行业趋势、商业模式与AI赋能方法论。' }
+  },
+  {
     path: '/about',
     name: 'about',
     component: () => import('./views/AboutView.vue'),
