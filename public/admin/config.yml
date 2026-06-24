@@ -188,6 +188,66 @@ collections:
             widget: "markdown"
             required: true
 
+  # ====== 网站设置 ======
+  - name: "site-settings"
+    label: "⚙️ 网站设置"
+    label_singular: "网站设置"
+    files:
+      - name: "homepage"
+        label: "首页设置"
+        file: "public/admin/settings.json"
+        fields:
+          - label: "Hero 区"
+            name: "hero"
+            widget: "object"
+            collapsed: false
+            fields:
+              - { label: "标签行", name: "tagline", widget: "string" }
+              - { label: "主标题", name: "title", widget: "text" }
+              - { label: "副标题", name: "subtitle", widget: "text" }
+          - label: "关于区"
+            name: "about"
+            widget: "object"
+            collapsed: true
+            fields:
+              - { label: "标题", name: "title", widget: "string" }
+              - { label: "简介", name: "text", widget: "text" }
+          - label: "订阅设置"
+            name: "subscribe"
+            widget: "object"
+            collapsed: true
+            fields:
+              - { label: "订阅数提示", name: "hint", widget: "string" }
+          - label: "社交链接"
+            name: "socialLinks"
+            widget: "object"
+            collapsed: true
+            fields:
+              - label: "公众号"
+                name: "wechat"
+                widget: "object"
+                fields:
+                  - { label: "名称", name: "label", widget: "string" }
+                  - { label: "链接", name: "url", widget: "string" }
+              - label: "知识星球"
+                name: "xiaohongshu"
+                widget: "object"
+                fields:
+                  - { label: "名称", name: "label", widget: "string" }
+                  - { label: "链接", name: "url", widget: "string" }
+              - label: "GitHub"
+                name: "twitter"
+                widget: "object"
+                fields:
+                  - { label: "名称", name: "label", widget: "string" }
+                  - { label: "链接", name: "url", widget: "string" }
+              - label: "邮件"
+                name: "email"
+                widget: "object"
+                fields:
+                  - { label: "名称", name: "label", widget: "string" }
+                  - { label: "链接", name: "url", widget: "string" }
+
 # ====== 编辑器配置 ======
 editor:
   preview: true

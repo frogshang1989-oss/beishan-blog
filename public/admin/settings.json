@@ -1,0 +1,20 @@
+{
+  "hero": {
+    "tagline": "一人即团队，体系即壁垒",
+    "title": "一人公司从 0 到 1\n的商业认知体系",
+    "subtitle": "每周一篇深度拆解——从行业趋势洞察到商业模式解构，帮助你用系统思维构建一人公司的竞争壁垒。"
+  },
+  "about": {
+    "title": "我是山人",
+    "text": "15年商业研究经验，服务过 YANMAR、韩国CJ 等国际企业。\n现在聚焦一人公司赛道——用系统化商业思维 + AI 工具赋能，帮助超级个体构建从 0 到 1 的完整商业体系。"
+  },
+  "subscribe": {
+    "hint": "已有 1,260+ 读者加入"
+  },
+  "socialLinks": {
+    "wechat": { "label": "公众号", "url": "#" },
+    "xiaohongshu": { "label": "知识星球", "url": "#" },
+    "twitter": { "label": "GitHub", "url": "https://github.com/frogshang1989-oss" },
+    "email": { "label": "邮件", "url": "mailto:frogshang@foxmail.com" }
+  }
+}

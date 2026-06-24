@@ -6,6 +6,13 @@ export default {
   description: '从行业洞察到商业模式，从认知升级到实战落地——一人公司的商业认知体系。覆盖宏观趋势、商业模式拆解、AI赋能方法论。',
   footer: '© 2026 北山洞见',
 
+  // ====== 订阅 API 配置 ======
+  // 部署 Vercel 后，将 apiUrl 改为你的 Vercel 域名
+  // 例: 'https://beishan-subscribe.vercel.app/api/subscribe'
+  api: {
+    subscribeUrl: '/api/subscribe'  // 开发时用本地代理；部署后改为 Vercel URL
+  },
+
   // 首页 Hero
   hero: {
     tagline: '一人即团队，体系即壁垒',
@@ -17,11 +24,8 @@ export default {
       placeholder: '输入邮箱，订阅周报',
       buttonText: '订阅',
       hint: '已有 1,260+ 读者加入',
-      // 接入方式（三选一，改 url 即可切换）：
-      //   Substack:  https://你的名字.substack.com/embed
-      //   ConvertKit: https://你的页面.kit.com/xxxx
-      //   自建:  /subscribe 页面
-      url: '/subscribe'
+      successMsg: '🎉 订阅成功！确认邮件已发送，请检查收件箱',
+      errorMsg: '订阅失败，请稍后重试或直接联系 frogshang@foxmail.com'
     }
   },
 

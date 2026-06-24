@@ -339,6 +339,19 @@ img {
   color: var(--c-text-tertiary);
 }
 
+.subscribe-success-msg {
+  margin-top: 12px;
+  font-size: 0.85rem;
+  color: #30a64a;
+  font-weight: 500;
+}
+
+.subscribe-error-msg {
+  margin-top: 12px;
+  font-size: 0.85rem;
+  color: #e53e3e;
+}
+
 /* ===== ② 产品卡片区（销售型） ===== */
 .product-grid {
   display: grid;

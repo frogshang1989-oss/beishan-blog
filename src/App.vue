@@ -38,7 +38,9 @@
 
 <script setup>
 import { ref, onMounted, onUnmounted } from 'vue'
-import config from './config.js'
+import { useSiteConfig } from './composables/useSiteConfig.js'
+
+const { siteConfig: config } = useSiteConfig()
 
 const isScrolled = ref(false)
 

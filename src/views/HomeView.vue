@@ -13,15 +13,23 @@
             <input
               v-model="email"
               type="email"
-              :placeholder="config.hero.subscribe.placeholder"
+              :placeholder="subscribeStatus === 'success' ? '订阅成功！' : config.hero.subscribe.placeholder"
               class="subscribe-input"
+              :disabled="subscribeStatus === 'loading' || subscribeStatus === 'success'"
               required
             />
-            <button type="submit" class="subscribe-btn">
-              {{ config.hero.subscribe.buttonText }}
+            <button
+              type="submit"
+              class="subscribe-btn"
+              :disabled="subscribeStatus === 'loading'"
+            >
+              <template v-if="subscribeStatus === 'loading'">提交中...</template>
+              <template v-else>{{ config.hero.subscribe.buttonText }}</template>
             </button>
           </div>
-          <p class="subscribe-hint">{{ config.hero.subscribe.hint }}</p>
+          <p v-if="subscribeStatus === 'success'" class="subscribe-success-msg">{{ subscribeMsg }}</p>
+          <p v-else-if="subscribeStatus === 'error'" class="subscribe-error-msg">{{ subscribeMsg }}</p>
+          <p v-else class="subscribe-hint">{{ config.hero.subscribe.hint }}</p>
         </form>
       </div>
     </section>
@@ -119,14 +127,17 @@
 import { ref, computed } from 'vue'
 import { useArticles } from '../composables/useArticles.js'
 import { useSEO } from '../composables/useSEO.js'
-import config from '../config.js'
+import { useSiteConfig } from '../composables/useSiteConfig.js'
 import ArticleCard from '../components/ArticleCard.vue'
 
 useSEO()
 
+const { siteConfig: config } = useSiteConfig()
 const { posts: allPosts } = useArticles()
 const email = ref('')
 const searchQuery = ref('')
+const subscribeStatus = ref('idle') // idle | loading | success | error
+const subscribeMsg = ref('')
 
 const filteredPosts = computed(() => {
   const q = searchQuery.value.trim().toLowerCase()
@@ -140,9 +151,31 @@ const filteredPosts = computed(() => {
   }).slice(0, 6)
 })
 
-function handleSubscribe() {
-  if (!email.value.trim()) return
-  // 当前跳转到订阅页面，接入邮件服务后改为 API 调用
-  window.open(config.hero.subscribe.url, '_blank')
+async function handleSubscribe() {
+  if (!email.value.trim() || subscribeStatus.value === 'loading') return
+
+  subscribeStatus.value = 'loading'
+  subscribeMsg.value = ''
+
+  try {
+    const resp = await fetch(config.api.subscribeUrl, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ email: email.value.trim() })
+    })
+    const data = await resp.json()
+
+    if (data.success) {
+      subscribeStatus.value = 'success'
+      subscribeMsg.value = data.message
+      email.value = ''
+    } else {
+      subscribeStatus.value = 'error'
+      subscribeMsg.value = data.message || config.hero.subscribe.errorMsg
+    }
+  } catch {
+    subscribeStatus.value = 'error'
+    subscribeMsg.value = config.hero.subscribe.errorMsg
+  }
 }
 </script>

@@ -10,18 +10,20 @@
 
       <!-- 订阅表单 -->
       <form class="subscribe-page-form" @submit.prevent="handleSubmit">
-        <input
-          v-model="email"
-          type="email"
-          placeholder="your@email.com"
-          class="subscribe-input-large"
-          required
-        />
-        <button type="submit" class="btn btn-primary btn-large" :disabled="submitted">
-          {{ submitted ? '已提交 ✓' : '免费订阅' }}
+          <input
+            v-model="email"
+            type="email"
+            placeholder="your@email.com"
+            class="subscribe-input-large"
+            :disabled="loading || submitted"
+            required
+          />
+        <button type="submit" class="btn btn-primary btn-large" :disabled="loading">
+          {{ loading ? '提交中...' : submitted ? '已订阅 ✓' : '免费订阅' }}
         </button>
       </form>
 
+      <p v-if="errorMsg" class="subscribe-error-page">{{ errorMsg }}</p>
       <p v-if="submitted" class="subscribe-success">
         🎉 感谢订阅！确认邮件已发送到 {{ submittedEmail }}，请检查收件箱。
       </p>
@@ -46,19 +48,42 @@
 <script setup>
 import { ref } from 'vue'
 import { useSEO } from '../composables/useSEO.js'
+import config from '../config.js'
 
 useSEO({ title: '订阅周报 - 北山洞见' })
 
 const email = ref('')
 const submitted = ref(false)
 const submittedEmail = ref('')
+const loading = ref(false)
+const errorMsg = ref('')
 
-function handleSubmit() {
-  if (!email.value.trim()) return
-  submittedEmail.value = email.value
-  submitted.value = true
-  // TODO: 接入邮件服务 API（ConvertKit / Substack / Buttondown）
-  email.value = ''
+async function handleSubmit() {
+  if (!email.value.trim() || loading.value) return
+
+  loading.value = true
+  errorMsg.value = ''
+
+  try {
+    const resp = await fetch(config.api.subscribeUrl, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ email: email.value.trim() })
+    })
+    const data = await resp.json()
+
+    if (data.success) {
+      submittedEmail.value = email.value
+      submitted.value = true
+      email.value = ''
+    } else {
+      errorMsg.value = data.message || '订阅失败，请稍后重试'
+    }
+  } catch {
+    errorMsg.value = '网络异常，请稍后重试'
+  } finally {
+    loading.value = false
+  }
 }
 </script>
 
@@ -132,6 +157,12 @@ function handleSubmit() {
   font-size: 0.95rem;
   margin-bottom: 28px;
   line-height: 1.5;
+}
+
+.subscribe-error-page {
+  color: #e53e3e;
+  font-size: 0.9rem;
+  margin-bottom: 20px;
 }
 
 .subscribe-benefits {
