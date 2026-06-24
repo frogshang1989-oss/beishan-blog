@@ -1,21 +1,6 @@
 {
   "functions": {
-    "api/subscribe.js": {
-      "memory": 256,
-      "maxDuration": 10
-    }
-  },
-  "rewrites": [
-    { "source": "/api/subscribe", "destination": "/api/subscribe" }
-  ],
-  "headers": [
-    {
-      "source": "/api/(.*)",
-      "headers": [
-        { "key": "Access-Control-Allow-Origin", "value": "https://frogshang1989-oss.github.io" },
-        { "key": "Access-Control-Allow-Methods", "value": "POST, OPTIONS" },
-        { "key": "Access-Control-Allow-Headers", "value": "Content-Type" }
-      ]
-    }
-  ]
+    "api/subscribe.js": { "memory": 256, "maxDuration": 10 },
+    "api/subscribers.js": { "memory": 256, "maxDuration": 10 }
+  }
 }

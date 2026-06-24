@@ -7,10 +7,10 @@ export default {
   footer: '© 2026 北山洞见',
 
   // ====== 订阅 API 配置 ======
-  // 部署 Vercel 后，将 apiUrl 改为你的 Vercel 域名
+  // Vercel 部署完成后，改为你的 Vercel 域名
   // 例: 'https://beishan-subscribe.vercel.app/api/subscribe'
   api: {
-    subscribeUrl: '/api/subscribe'  // 开发时用本地代理；部署后改为 Vercel URL
+    subscribeUrl: '/api/subscribe'
   },
 
   // 首页 Hero
