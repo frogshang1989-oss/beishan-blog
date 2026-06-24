@@ -14,7 +14,7 @@ export function useSiteConfig() {
   // 只加载一次
   if (!loaded.value) {
     loaded.value = true
-    fetch('/admin/settings.json')
+    fetch(import.meta.env.BASE_URL + 'admin/settings.json')
       .then(res => {
         if (!res.ok) throw new Error('settings not found')
         return res.json()

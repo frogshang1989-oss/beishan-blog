@@ -52,10 +52,10 @@
             <div class="product-icon">{{ product.icon }}</div>
             <h3>{{ product.title }}</h3>
             <p>{{ product.desc }}</p>
-            <a :href="product.link" class="btn btn-product">
+            <router-link :to="product.link" class="btn btn-product">
               {{ product.button }}
               <span class="btn-arrow">→</span>
-            </a>
+            </router-link>
           </div>
         </div>
       </div>
