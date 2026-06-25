@@ -20,83 +20,87 @@
 
 ---
 
-## 第一步：准备腾讯云账号
+## 第一步：创建 CloudBase 环境
 
 1. 访问 https://cloud.tencent.com/ 注册/登录
 2. 进入 [CloudBase 控制台](https://console.cloud.tencent.com/tcb)
-3. 创建新环境（选「免费版」即可），记下 **环境 ID**（如 `beishan-blog-xxx`）
+3. 点击 **新建环境**，选 **免费版**
+4. 记下 **环境 ID**（如 `beishan-blog-xxx`）
 
 ---
 
-## 第二步：安装 CloudBase CLI
-
-```bash
-npm install -g @cloudbase/cli
-```
-
-登录：
-
-```bash
-tcb login
-```
-
-按提示用微信/QQ/腾讯云账号扫码授权。
-
----
-
-## 第三步：创建数据库集合
+## 第二步：创建数据库集合
 
 在 CloudBase 控制台 → **数据库** → 新建集合：
 
 - 集合名称：`subscribers`
-- 索引：为 `email` 字段创建唯一索引（可选，防止重复）
+- 权限模式：建议选 **“仅创建者及管理员可读写”** 或默认
+- 索引（可选但推荐）：为 `email` 字段创建 **唯一索引**，防止重复
 
 ---
 
-## 第四步：部署云函数
+## 第三步：创建 subscribe 云函数
 
-### 1. 修改环境 ID
+### 3.1 创建函数
 
-打开项目根目录的 `cloudbaserc.json`，把 `your-env-id` 换成你的真实环境 ID。
+1. 控制台 → **云函数** → **新建云函数**
+2. 函数名称：`subscribe`
+3. 运行环境：Node.js 18.x
+4. 触发器：HTTP 触发器，路径 `/subscribe`，方法勾选 `POST` 和 `OPTIONS`
+
+### 3.2 粘贴代码
+
+把 `cloudbase/functions/subscribe/index.js` 的内容完整粘贴到函数编辑器中。
+
+### 3.3 安装依赖
+
+函数编辑器通常有 `package.json` 或依赖安装入口。添加依赖：
 
 ```json
 {
-  "version": "2.0",
-  "envId": "beishan-blog-xxx"
+  "dependencies": {
+    "@cloudbase/node-sdk": "latest"
+  }
 }
 ```
 
-### 2. 修改默认管理密码（可选）
+或使用本文件 `cloudbase/functions/subscribe/package.json` 的内容。
 
-- `cloudbase/functions/subscribers/config.json` 中的 `environment.ADMIN_PASSWORD`
-- `cloudbaserc.json` 中的 `framework.plugins.function.inputs.functions[1].config.envVariables.ADMIN_PASSWORD`
+### 3.4 部署
 
-建议保持两者一致。
+点击 **保存并安装依赖** → **部署**。
 
-### 3. 部署
+复制生成的 HTTP 访问地址，形如：
 
-在项目根目录执行：
-
-```bash
-tcb framework deploy
+```
+https://beishan-blog-xxx-xxxx.service.tcloudbase.com/subscribe
 ```
 
-或老版 CLI：
+---
 
-```bash
-tcb deploy cloudbase/functions/subscribe
+## 第四步：创建 subscribers 云函数
+
+1. 控制台 → **云函数** → **新建云函数**
+2. 函数名称：`subscribers`
+3. 运行环境：Node.js 18.x
+4. 触发器：HTTP 触发器，路径 `/subscribers`，方法勾选 `GET` 和 `OPTIONS`
+5. 环境变量：添加 `ADMIN_PASSWORD`，值为你的管理密码（默认 `beishan2026`）
+
+把 `cloudbase/functions/subscribers/index.js` 的内容粘贴到编辑器，安装 `@cloudbase/node-sdk` 依赖，然后部署。
+
+复制 HTTP 访问地址，形如：
+
 ```
-
-部署成功后，CloudBase 会给出两个云函数访问地址，形如：
-
-- `https://beishan-blog-xxx-xxxx.service.tcloudbase.com/subscribe`
-- `https://beishan-blog-xxx-xxxx.service.tcloudbase.com/subscribers`
+https://beishan-blog-xxx-xxxx.service.tcloudbase.com/subscribers
+```
 
 ---
 
 ## 第五步：配置前端
 
-打开 `src/config.js`，填入上一步拿到的云函数地址：
+### 方式一：直接写死在 config.js（适合快速验证）
+
+打开 `src/config.js`，填入刚才复制的两个地址：
 
 ```js
 cloudbase: {
@@ -107,7 +111,13 @@ cloudbase: {
 }
 ```
 
-也可以把这两个地址填入 **GitHub Secrets**（推荐），构建时自动注入，无需写死在前端代码里：
+### 方式二：用 GitHub Secrets（推荐，更安全）
+
+打开仓库设置页：
+
+🔗 https://github.com/frogshang1989-oss/beishan-blog/settings/secrets/actions
+
+添加三个 Secrets：
 
 | Secret 名称 | 值 |
 |---|---|
@@ -115,15 +125,14 @@ cloudbase: {
 | `SUBSCRIBERS_URL` | 订阅者列表云函数地址 |
 | `ADMIN_PASSWORD` | 管理密码 |
 
-仓库设置页：
-
-🔗 https://github.com/frogshang1989-oss/beishan-blog/settings/secrets/actions
+GitHub Actions 构建时会自动注入，无需写死在前端代码里。
 
 ---
 
 ## 第六步：提交并推送
 
 ```bash
+cd "D:/工作空间/beishan-blog"
 git add .
 git commit -m "feat: 迁移订阅系统到腾讯云 CloudBase"
 git push origin main
@@ -148,18 +157,27 @@ GitHub Actions 会自动构建并部署到 GitHub Pages。
 
 ---
 
-## 清理旧文件
+## 安全说明
 
-确认 CloudBase 方案运行正常后，可删除以下 GitHub Issues 方案残留文件：
-
-- `src/composables/useGitHubSubscribe.js`
-- `src/composables/useGitHubSubscribers.js`
-- `DEPLOY_SUBSCRIBE_GITHUB.md`
+- 管理页密码仅用于基础访问控制，前端代码中需要包含它（用于调用 subscribers 云函数）。
+- 建议定期更换 `ADMIN_PASSWORD`。
+- CloudBase 环境 ID 和云函数 URL 是公开可访问的，但 `subscribers` 云函数需要正确密码才能返回数据。
 
 ---
 
-## 安全说明
+## 备选：CLI 部署
 
-- 管理页密码仅用于基础访问控制，前端代码中会包含它（用于调用 subscribers 云函数）。
-- 建议定期更换 `ADMIN_PASSWORD`。
-- CloudBase 环境 ID 和云函数 URL 是公开可访问的，但 `subscribers` 云函数需要正确密码才能返回数据。
+如果你更习惯命令行，可以安装 CloudBase CLI：
+
+```bash
+npm install -g @cloudbase/cli
+tcb login
+```
+
+然后修改 `cloudbaserc.json` 中的 `envId`，执行：
+
+```bash
+tcb framework deploy
+```
+
+不过控制台图形化部署更直观，推荐优先使用控制台方式。
