@@ -26,6 +26,10 @@ jobs:
         run: npm run auto-tag || true
 
       - name: Build
+        env:
+          VITE_SUBSCRIBE_URL: ${{ secrets.SUBSCRIBE_URL }}
+          VITE_SUBSCRIBERS_URL: ${{ secrets.SUBSCRIBERS_URL }}
+          VITE_ADMIN_PASSWORD: ${{ secrets.ADMIN_PASSWORD }}
         run: npm run build
 
       - name: Deploy to GitHub Pages

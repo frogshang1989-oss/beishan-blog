@@ -1,0 +1,17 @@
+{
+  "name": "subscribers",
+  "runtime": "Nodejs18.15",
+  "handler": "index.main",
+  "timeout": 5,
+  "memorySize": 128,
+  "environment": {
+    "ADMIN_PASSWORD": "beishan2026"
+  },
+  "triggers": [
+    {
+      "name": "subscribers-http",
+      "type": "http",
+      "path": "/subscribers"
+    }
+  ]
+}

@@ -5,7 +5,6 @@
       <h1>订阅北山洞见周报</h1>
       <p class="subscribe-page-desc">
         每周一篇深度商业拆解，覆盖行业趋势、商业模式、AI 赋能方法论。
-        目前已有 <strong>1,260+</strong> 位一人公司创业者订阅。
       </p>
 
       <!-- 订阅表单 -->
@@ -23,9 +22,9 @@
         </button>
       </form>
 
-      <p v-if="errorMsg" class="subscribe-error-page">{{ errorMsg }}</p>
-      <p v-if="submitted" class="subscribe-success">
-        🎉 感谢订阅！确认邮件已发送到 {{ submittedEmail }}，请检查收件箱。
+      <p v-if="error" class="subscribe-error-page">{{ error }}</p>
+      <p v-if="success" class="subscribe-success">
+        🎉 感谢订阅！你的邮箱 {{ submittedEmail }} 已加入订阅列表。
       </p>
 
       <div class="subscribe-benefits">
@@ -48,41 +47,23 @@
 <script setup>
 import { ref } from 'vue'
 import { useSEO } from '../composables/useSEO.js'
-import config from '../config.js'
+import { useCloudBaseSubscribe } from '../composables/useCloudBaseSubscribe.js'
 
 useSEO({ title: '订阅周报 - 北山洞见' })
 
 const email = ref('')
 const submitted = ref(false)
 const submittedEmail = ref('')
-const loading = ref(false)
-const errorMsg = ref('')
+
+const { loading, error, success, subscribe } = useCloudBaseSubscribe()
 
 async function handleSubmit() {
   if (!email.value.trim() || loading.value) return
-
-  loading.value = true
-  errorMsg.value = ''
-
-  try {
-    const resp = await fetch(config.api.subscribeUrl, {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ email: email.value.trim() })
-    })
-    const data = await resp.json()
-
-    if (data.success) {
-      submittedEmail.value = email.value
-      submitted.value = true
-      email.value = ''
-    } else {
-      errorMsg.value = data.message || '订阅失败，请稍后重试'
-    }
-  } catch {
-    errorMsg.value = '网络异常，请稍后重试'
-  } finally {
-    loading.value = false
+  submittedEmail.value = email.value.trim()
+  const ok = await subscribe(email.value)
+  if (ok) {
+    submitted.value = true
+    email.value = ''
   }
 }
 </script>
@@ -119,10 +100,6 @@ async function handleSubmit() {
   color: var(--c-text-secondary);
   line-height: 1.55;
   margin-bottom: 28px;
-}
-
-.subscribe-page-desc strong {
-  color: var(--c-text);
 }
 
 .subscribe-page-form {

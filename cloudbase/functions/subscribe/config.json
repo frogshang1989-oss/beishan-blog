@@ -1,0 +1,14 @@
+{
+  "name": "subscribe",
+  "runtime": "Nodejs18.15",
+  "handler": "index.main",
+  "timeout": 5,
+  "memorySize": 128,
+  "triggers": [
+    {
+      "name": "subscribe-http",
+      "type": "http",
+      "path": "/subscribe"
+    }
+  ]
+}

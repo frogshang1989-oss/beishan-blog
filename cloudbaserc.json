@@ -1,0 +1,33 @@
+{
+  "version": "2.0",
+  "envId": "your-env-id",
+  "framework": {
+    "name": "beishan-blog-cloudbase",
+    "plugins": {
+      "function": {
+        "use": "@cloudbase/framework-plugin-function",
+        "inputs": {
+          "functionRoot": "./cloudbase/functions",
+          "functions": [
+            {
+              "name": "subscribe",
+              "config": {
+                "timeout": 5,
+                "envVariables": {}
+              }
+            },
+            {
+              "name": "subscribers",
+              "config": {
+                "timeout": 5,
+                "envVariables": {
+                  "ADMIN_PASSWORD": "beishan2026"
+                }
+              }
+            }
+          ]
+        }
+      }
+    }
+  }
+}

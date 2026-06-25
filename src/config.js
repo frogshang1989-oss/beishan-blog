@@ -6,12 +6,23 @@ export default {
   description: '从行业洞察到商业模式，从认知升级到实战落地——一人公司的商业认知体系。覆盖宏观趋势、商业模式拆解、AI赋能方法论。',
   footer: '© 2026 北山洞见',
 
-  // ====== 订阅 API 配置 ======
-  // Vercel 部署完成后，改为你的 Vercel 域名
-  // 例: 'https://beishan-subscribe.vercel.app/api/subscribe'
-  api: {
-    subscribeUrl: '/api/subscribe'
+  // ====== 订阅配置（腾讯云 CloudBase 作为后端）=====
+  // 部署完成后，将 cloudbaserc.json 中的 envId 和两个云函数 URL 填入此处
+  cloudbase: {
+    envId: '',
+    // 订阅云函数 HTTP 地址，形如：
+    // https://your-env-id-xxx.service.tcloudbase.com/subscribe
+    subscribeUrl: '',
+    // 订阅者列表云函数 HTTP 地址，形如：
+    // https://your-env-id-xxx.service.tcloudbase.com/subscribers
+    subscribersUrl: '',
+    // 管理密码（构建时由 VITE_ADMIN_PASSWORD 注入，默认 beishan2026）
+    adminPassword: 'beishan2026'
   },
+
+  // 已废弃：Vercel / GitHub Issues 订阅方案
+  // api: { subscribeUrl: '/api/subscribe' },
+  // github: { ... }
 
   // 首页 Hero
   hero: {

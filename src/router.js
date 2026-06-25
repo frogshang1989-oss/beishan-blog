@@ -56,6 +56,12 @@ const routes = [
     meta: { title: '订阅周报', description: '订阅北山洞见周报，每周一篇深度商业拆解，覆盖行业趋势、商业模式与AI赋能方法论。' }
   },
   {
+    path: '/admin/subscribers',
+    name: 'admin-subscribers',
+    component: () => import('./views/AdminView.vue'),
+    meta: { title: '订阅者管理' }
+  },
+  {
     path: '/about',
     name: 'about',
     component: () => import('./views/AboutView.vue'),
